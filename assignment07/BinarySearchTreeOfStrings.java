@@ -143,9 +143,6 @@ public class BinarySearchTreeOfStrings {
 			}
 			remove(x, thisRoot.left);
 		}
-		else {
-			throw  new  NoSuchElementException ();
-		}
 		
 		if(right && !rightNull) {
 			if(thisRoot.right.data.compareTo(x) == 0) {
@@ -169,9 +166,9 @@ public class BinarySearchTreeOfStrings {
 			}
 			remove(x, thisRoot.right);
 		}
-		else {
-			throw  new  NoSuchElementException ();
-		}
+		
+		throw  new  NoSuchElementException ();
+		
 		
 	}
 
@@ -199,6 +196,7 @@ public class BinarySearchTreeOfStrings {
 	}
 	
 	private Node farRightNode(Node thisRoot) {
+		//TODO: create a follower node so you can set this node to null (first do the left node in a separate method)
 		if(thisRoot.right == null) {
 			Node hold = new Node();
 			hold.data = thisRoot.data;
