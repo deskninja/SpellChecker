@@ -2,6 +2,7 @@ package assignment07;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  * A binary search tree implementation from scratch.
@@ -24,13 +25,19 @@ public class BinarySearchTreeOfStrings {
 	}
 	
 	private void balanceTree(Node thisRoot) {
-		ArrayList<String> treeData = inOrderData(thisRoot);
-		String[] thisData = new String[treeData.size()];
+		String[] thisData = new String[this.size()];
+		String[] nullData = new String[this.size() + 1];
+		String nextItem = inOrder(this.root);
+		nullData = nextItem.split(",");
 		int index = 0;
-		for(String s: treeData) {
-			thisData[index] = s;
-			index++;
+		for(String s: nullData) {
+			System.out.println(s.length());
+			if(!s.equals(null)) {
+				thisData[index] = s;
+				index++;
+			}
 		}
+		System.out.println(thisData.toString());
 		clear();
 		insertBalancedData(thisData);
 		
@@ -63,26 +70,6 @@ public class BinarySearchTreeOfStrings {
 		}
 		return newData;
 	}
-	
-	private ArrayList<String> inOrderData(Node thisRoot){
-		if(thisRoot == null)
-			return null;
-		
-		ArrayList<String> treeData = new ArrayList<>();
-
-		for(String s: inOrderData(thisRoot.left))
-			if(s != null)
-				treeData.add(s);
-	
-		treeData.add(thisRoot.data);
-	
-		for(String s: inOrderData(thisRoot.right))
-			if(s != null)
-				treeData.add(s);
-		
-		return treeData;
-	}
-
 	
 	/**
 	 * outputs the data of the tree in-order
@@ -132,14 +119,9 @@ public class BinarySearchTreeOfStrings {
 				insert(n, thisRoot.right);	
 		}
 	}
-
-	private void remove(String x, Node thisRoot) {
-		boolean right = false; //if it is left of the node false, if right, true
-		if(thisRoot.data.compareTo(x) < 0) {
-			right= true;
-		}
-		
-		if(!right) {
+	
+	private void leftRight(String x, Node thisRoot, boolean right, boolean leftNull, boolean rightNull) {
+		if(!right && !leftNull) {
 			if(thisRoot.left.data.compareTo(x) == 0) {
 				Node hold = thisRoot.left;
 				
@@ -156,12 +138,16 @@ public class BinarySearchTreeOfStrings {
 					thisRoot.left = null;
 				}
 				this.size--;
+				//this.balanceTree(this.root);
 				return;
 			}
 			remove(x, thisRoot.left);
 		}
+		else {
+			throw  new  NoSuchElementException ();
+		}
 		
-		if(right) {
+		if(right && !rightNull) {
 			if(thisRoot.right.data.compareTo(x) == 0) {
 				Node hold = thisRoot.right;
 				
@@ -178,47 +164,46 @@ public class BinarySearchTreeOfStrings {
 					thisRoot.right = null;
 				}
 				this.size--;
+				//this.balanceTree(this.root);
 				return;
 			}
 			remove(x, thisRoot.right);
 		}
-		
+		else {
+			throw  new  NoSuchElementException ();
+		}
 		
 	}
-//		//remove the current node
-//		if(thisRoot.data.compareTo(x) == 0) {
-//			if(thisRoot.left != null)
-//				thisRoot = farRightNode(thisRoot.left);
-//			
-//			else if(thisRoot.right != null) {
-//				Node newRoot = new Node();
-//				newRoot = thisRoot.right;
-//				thisRoot = newRoot;
-//			}
-//			
-//			else {
-//				thisRoot= null;
-//			}
-//			this.size--;
-//			return;
-//		}
-		
-//		//find the node with the data {@code x}
-//		if(!right && thisRoot.left != null) {
-//			remove(x, thisRoot.left);
-//		}
-//		
-//		else if(right && thisRoot.right == null) {
-//			remove(x, thisRoot.right);
-//		}
-//		
-//		else {
-//			throw  new  NoSuchElementException ();
-//		}
+
+	private void remove(String x, Node thisRoot) {
+		boolean right = false; //if it is left of the node false, if right, true
+		boolean leftNull = thisRoot.left == null;
+		boolean rightNull = thisRoot.right == null;
+		if(thisRoot.data.compareTo(x) <= 0) {
+			right= true;
+			if(thisRoot.data.compareTo(x) == 0) {
+				if(!leftNull) {
+					thisRoot.data = farRightNode(thisRoot.left).data;
+					this.size--;
+					this.balanceTree(this.root);
+					return;
+				}
+				else {
+					thisRoot = thisRoot.right;
+					this.size--;
+					return;
+				}
+			}
+		}
+		leftRight(x, thisRoot, right, leftNull, rightNull);
+	}
 	
 	private Node farRightNode(Node thisRoot) {
 		if(thisRoot.right == null) {
-			return thisRoot;
+			Node hold = new Node();
+			hold.data = thisRoot.data;
+			thisRoot.data = null;
+			return hold;
 		}
 		return farRightNode(thisRoot.right);
 	}
@@ -274,6 +259,10 @@ public class BinarySearchTreeOfStrings {
 	public void remove(String x) {
 		if(this.size() == 0) {
 			throw  new  NoSuchElementException ();
+		}
+		if(this.size() == 1) {
+			this.clear();
+			return;
 		}
 		remove(x, this.root);
 		//balanceTree(this.root);
