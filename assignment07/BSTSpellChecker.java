@@ -11,6 +11,7 @@ public class BSTSpellChecker implements SpellChecker {
 	private BinarySearchTreeOfStrings dictionary;
 	ArrayList<String> validWords;
 	ArrayList<String> misspelled;
+	ArrayList<String> wordsToCheck;
 	
 	/**
 	 * Pulls the words from the file and puts them into an arrayList.
@@ -29,6 +30,35 @@ public class BSTSpellChecker implements SpellChecker {
 		return list;
 	}
 	
+	private static ArrayList<String> wordsInFile(String filename){
+		ArrayList<String> words = new ArrayList<>();
+		ArrayList<String> file = new ArrayList<>();
+		file = readFile(filename);
+		StringBuilder word = new StringBuilder(); //each number to add to the array goes here
+		int index = 0;
+		//for each line in the file
+		for(String s: file) {
+			index = 0;
+			//go through each character
+			while(index < s.length()) {
+				//ignore a space and use it as a call to put a new word in words
+				if(s.charAt(index) != ' ') {
+					word.append(s.charAt(index));
+				}
+				if(s.charAt(index) == ' ') {
+					words.add(word.toString());
+					word = new StringBuilder();
+				}
+				index++;
+			}
+			if(word.toString() != "") {
+				words.add(word.toString());
+				word = new StringBuilder();
+			}
+		}
+		return words;
+	}
+	
 	public BSTSpellChecker() {
 		clear();
 	}
@@ -42,15 +72,16 @@ public class BSTSpellChecker implements SpellChecker {
 	
 	@Override
 	public List<String> misspelledWords(String filename) {
-		misspelled = //method to read file and return ArrayList of misspelled words
+		this.misspelled = //method to read file and return ArrayList of misspelled words
 		return null;
 	}
 	
 	@Override
 	public void clear() {
-		dictionary = new BinarySearchTreeOfStrings();
-		validWords = new ArrayList<>();
-		misspelled = new ArrayList<>();
+		this.dictionary = new BinarySearchTreeOfStrings();
+		this.validWords = new ArrayList<>();
+		this.misspelled = new ArrayList<>();
+		this.wordsToCheck = new ArrayList<>();
 	}
 
 }
