@@ -9,6 +9,7 @@ import components.simplereader.SimpleReader1L;
 public class BSTSpellChecker implements SpellChecker {
 
 	private BinarySearchTreeOfStrings dictionary;
+	ArrayList<String> validWords;
 	
 	/**
 	 * Pulls the words from the file and puts them into an arrayList.
@@ -33,8 +34,9 @@ public class BSTSpellChecker implements SpellChecker {
 	
 	@Override
 	public void loadValidWords(String filename) {
-		// TODO Auto-generated method stub
-		
+		this.validWords = readFile(filename);
+		for(String s: validWords)
+			dictionary.insert(s);
 	}
 	
 	@Override
@@ -46,6 +48,7 @@ public class BSTSpellChecker implements SpellChecker {
 	@Override
 	public void clear() {
 		dictionary = new BinarySearchTreeOfStrings();
+		validWords = new ArrayList<>();
 	}
 
 }
