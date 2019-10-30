@@ -10,6 +10,7 @@ public class BSTSpellChecker implements SpellChecker {
 
 	private BinarySearchTreeOfStrings dictionary;
 	ArrayList<String> validWords;
+	ArrayList<String> misspelled;
 	
 	/**
 	 * Pulls the words from the file and puts them into an arrayList.
@@ -41,7 +42,7 @@ public class BSTSpellChecker implements SpellChecker {
 	
 	@Override
 	public List<String> misspelledWords(String filename) {
-		// TODO Auto-generated method stub
+		misspelled = //method to read file and return ArrayList of misspelled words
 		return null;
 	}
 	
@@ -49,6 +50,7 @@ public class BSTSpellChecker implements SpellChecker {
 	public void clear() {
 		dictionary = new BinarySearchTreeOfStrings();
 		validWords = new ArrayList<>();
+		misspelled = new ArrayList<>();
 	}
 
 }
