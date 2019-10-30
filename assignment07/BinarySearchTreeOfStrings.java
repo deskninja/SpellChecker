@@ -1,6 +1,7 @@
 package assignment07;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -24,49 +25,51 @@ public class BinarySearchTreeOfStrings {
 		private Node left, right;
 	}
 	
+	private boolean contains(String x, Node head) {
+		if(head.data.compareTo(x) == 0)
+			return true;
+		if(head.data.compareTo(x) > 0 && head.left != null)
+			return contains(x, head.left);
+		if(head.data.compareTo(x) < 0 && head.right != null)
+			return contains(x, head.right);
+		return false;
+	}
+	
 	private void balanceTree(Node thisRoot) {
-		String[] thisData = new String[this.size()];
-		String[] nullData = new String[this.size() + 1];
-		String nextItem = inOrder(this.root);
-		nullData = nextItem.split(",");
+		Scanner s = new Scanner(this.inOrder(this.root));
+		String[] data = new String[this.size()];
 		int index = 0;
-		for(String s: nullData) {
-			System.out.println(s.length());
-			if(!s.equals(null)) {
-				thisData[index] = s;
-				index++;
-			}
+		while(s.hasNext()) {
+			data[index] = s.next();
+			index++;
 		}
-		System.out.println(thisData.toString());
 		clear();
-		insertBalancedData(thisData);
-		
+		insertData(data);
 	}
 	
-	private void insertBalancedData(String[] thisData) {
-		if(thisData.length <= 2) {
-			if(thisData.length == 2) {
-				this.insert(thisData[0]);
-				this.insert(thisData[1]);
+	private void insertData(String[] data) {
+		if(data.length > 0) {
+			if(data.length == 1)
+				insert(data[0]);
+			else {
+				insert(data[data.length / 2]);
+				String[] leftData = addData(data, 0, data.length / 2);
+				insertData(leftData);
+				if(data.length > 2) {
+					//String[] rightData = new String[data.length - ((data.length / 2) + 1)];
+					String[] rightData = addData(data, (data.length / 2) + 1, data.length);
+					insertData(rightData);
+				}
 			}
-			if(thisData.length == 1) {
-				this.insert(thisData[0]);
-				return;
-			}
-			return;
 		}
-		
-		this.insert(thisData[thisData.length/2]);
-		String[] leftData = partOfArray(thisData, thisData.length / 2 - 1, 0);
-		insertBalancedData(leftData);
-		String[] rightData = partOfArray(thisData, thisData.length - (thisData.length / 2 + 1), thisData.length / 2 + 1);
-		insertBalancedData(rightData);
 	}
 	
-	private String[] partOfArray(String[] thisData, int length, int start) {
-		String[] newData = new String[length];
-		for(int i = start; i < length; i++) {
-			newData[i] = thisData[i];
+	private String[] addData(String[] data, int start, int end) {
+		String[] newData = new String[end - start];
+		int index = 0; 
+		for(int i = start; i < end; i++) {
+			newData[index] = data[i];
+			index++;
 		}
 		return newData;
 	}
@@ -75,26 +78,20 @@ public class BinarySearchTreeOfStrings {
 	 * outputs the data of the tree in-order
 	 * @param n
 	 */
-	private String inOrder(Node n) {
-		if(n == null) {
+	private String inOrder(Node head) {
+		if(head == null)
 			return "";
-		}
-		StringBuilder s = new StringBuilder();
-		if(s.length() != 0)
-			s.append(",");
-		
-		s.append(inOrder(n.left));
-		
-		if(n.left != null)
-			s.append(",");
-		
-		s.append(n.data);
-		if(n.right != null)
-			s.append(",");
-		
-		s.append(inOrder(n.right));
-		
-		return s.toString();
+		StringBuilder treeData = new StringBuilder();
+		if(treeData.length() != 0)
+			treeData.append(" ");
+		treeData.append(inOrder(head.left));
+		if(head.left != null)
+			treeData.append(" ");
+		treeData.append(head.data);
+		if(head.right != null)
+			treeData.append(" ");
+		treeData.append(inOrder(head.right));
+		return treeData.toString();
 	}
 	
 	private void insert(Node n, Node thisRoot) {
@@ -119,92 +116,106 @@ public class BinarySearchTreeOfStrings {
 				insert(n, thisRoot.right);	
 		}
 	}
-	
-	private void leftRight(String x, Node thisRoot, boolean right, boolean leftNull, boolean rightNull) {
-		if(!right && !leftNull) {
-			if(thisRoot.left.data.compareTo(x) == 0) {
-				Node hold = thisRoot.left;
-				
-				if(hold.left != null){
-					hold = farRightNode(hold.left);
-				}
-				else if(hold.right != null) {
-					Node newRoot = new Node();
-					newRoot = thisRoot.right;
-					thisRoot = newRoot;
-				}
-				
-				else {
-					thisRoot.left = null;
-				}
-				this.size--;
-				//this.balanceTree(this.root);
-				return;
-			}
-			remove(x, thisRoot.left);
-		}
-		
-		if(right && !rightNull) {
-			if(thisRoot.right.data.compareTo(x) == 0) {
-				Node hold = thisRoot.right;
-				
-				if(hold.left != null){
-					hold = farRightNode(hold.left);
-				}
-				else if(hold.right != null) {
-					Node newRoot = new Node();
-					newRoot = thisRoot.right;
-					thisRoot = newRoot;
-				}
-				
-				else {
-					thisRoot.right = null;
-				}
-				this.size--;
-				//this.balanceTree(this.root);
-				return;
-			}
-			remove(x, thisRoot.right);
-		}
-		
-		throw  new  NoSuchElementException ();
-		
-		
-	}
 
-	private void remove(String x, Node thisRoot) {
-		boolean right = false; //if it is left of the node false, if right, true
-		boolean leftNull = thisRoot.left == null;
-		boolean rightNull = thisRoot.right == null;
-		if(thisRoot.data.compareTo(x) <= 0) {
-			right= true;
-			if(thisRoot.data.compareTo(x) == 0) {
-				if(!leftNull) {
-					thisRoot.data = farRightNode(thisRoot.left).data;
-					this.size--;
-					this.balanceTree(this.root);
-					return;
+	private void remove(String x, Node head) {
+		if(head.left != null && head.left.data.compareTo(x) <= 0) {
+			if(head.left.data.equals(x)) {
+				removeElement(head.left, head, false);
+				return;
+			}
+			remove(x, head.left);
+			return;
+		}
+		if(head.right != null && head.right.data.compareTo(x) >= 0) {
+			if(head.right.data.equals(x)) {
+				removeElement(head.right, head, true);
+				return;
+			}
+			remove(x, head.right);
+			return;
+		}
+		throw new NoSuchElementException();
+	}
+	
+	private void removeRoot() {
+		if(this.root.left != null) {
+			if(this.root.right != null) {
+				Node hold = this.root.left;
+				if(hold.right != null) {
+					Node tail = this.root.left;
+					hold = hold.right;
+					while(hold.right != null) {
+						hold = hold.right;
+						tail = tail.right;
+					}
+					this.root.data = hold.data;
+					tail.right = null;
 				}
 				else {
-					thisRoot = thisRoot.right;
-					this.size--;
-					return;
+					this.root.data = hold.data;
+					this.root.left = null;
 				}
 			}
 		}
-		leftRight(x, thisRoot, right, leftNull, rightNull);
+		else {
+			if(this.root.right != null) {
+				this.root = this.root.right;
+			}
+			else {
+				this.root.data = null;
+			}
+		}
+		this.size--;
 	}
 	
-	private Node farRightNode(Node thisRoot) {
-		//TODO: create a follower node so you can set this node to null (first do the left node in a separate method)
-		if(thisRoot.right == null) {
-			Node hold = new Node();
-			hold.data = thisRoot.data;
-			thisRoot.data = null;
-			return hold;
+	private void removeElement(Node removeNode, Node head, boolean right) {
+		if(removeNode.left != null) {
+			if(removeNode.right != null) {
+				Node hold = removeNode.left;
+				if(hold.right != null) {
+					Node tail = removeNode.left;
+					hold = hold.right;
+					while(hold.right != null) {
+						hold = hold.right;
+						tail = tail.right;
+					}
+					removeNode.data = hold.data;
+					tail.right = null;
+				}
+				else {
+					removeNode.data = hold.data;
+					removeNode.left = null;
+				}
+			}
+			if(right) {
+				head.right = removeNode.left;
+			}
+			else {
+				head.left = removeNode.left;
+			}
 		}
-		return farRightNode(thisRoot.right);
+		else {
+			if(removeNode.right != null) {
+				if(right) {
+					head.right = removeNode.right;
+				}
+				else {
+					head.left = removeNode.right;
+				}
+			}
+			else {
+				if(right) {
+					head.right = null;
+				}
+				else {
+					head.left = null;
+				}
+			}
+		}
+		this.size--;
+		System.out.println(this.toString());
 	}
+	
 	// Instance variables
 	private Node root;
 	private int size;
@@ -259,7 +270,14 @@ public class BinarySearchTreeOfStrings {
 			throw  new  NoSuchElementException ();
 		}
 		if(this.size() == 1) {
-			this.clear();
+				if(this.root.data.equals(x)) {
+					this.clear();
+					return;
+				}
+				throw new NoSuchElementException();
+		}
+		if(this.root.data.equals(x)) {
+			removeRoot();
 			return;
 		}
 		remove(x, this.root);
@@ -282,7 +300,9 @@ public class BinarySearchTreeOfStrings {
 	 * @return true iff this contains x
 	 */
 	public boolean contains(String x) {
-		return false; // TODO implement this method
+		if(this.root.data.compareTo(x) == 0)
+			return true;
+		return contains(x, this.root);
 	}
 
 	/**
@@ -302,13 +322,15 @@ public class BinarySearchTreeOfStrings {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		result.append("[");		
-		result.append(inOrder(root));
+		Scanner s = new Scanner(this.inOrder(this.root));
+		if(s.hasNext())
+			result.append(s.next());
+		while(s.hasNext()) {
+			result.append(",");
+			result.append(s.next());
+		}
+		s.close();
 		result.append("]");
 		return result.toString(); 
 	}
-
-	/*
-	 * Helper methods
-	 */
-	// TODO create private helper methods if required
 }
