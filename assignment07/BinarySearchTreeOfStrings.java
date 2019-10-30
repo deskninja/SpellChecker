@@ -268,7 +268,7 @@ public class BinarySearchTreeOfStrings {
 	 */
 	public void remove(String x) {
 		if(this.size() == 0) {
-			throw  new  NoSuchElementException ();
+			throw new NoSuchElementException ();
 		}
 		if(this.size() == 1) {
 				if(this.root.data.equals(x)) {
@@ -313,8 +313,7 @@ public class BinarySearchTreeOfStrings {
 	 */
 	public String root() {
 		if(this.size() == 0)
-			throw  new  NoSuchElementException ();
-		
+			throw new NoSuchElementException ();		
 		return root.data; 
 	}
 
