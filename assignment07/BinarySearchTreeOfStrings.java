@@ -35,7 +35,7 @@ public class BinarySearchTreeOfStrings {
 		return false;
 	}
 	
-	private void balanceTree(Node thisRoot) {
+	private void balanceTree() {
 		Scanner s = new Scanner(this.inOrder(this.root));
 		String[] data = new String[this.size()];
 		int index = 0;
@@ -45,6 +45,8 @@ public class BinarySearchTreeOfStrings {
 		}
 		clear();
 		insertData(data);
+		s.close();
+		System.out.println(this.toString());
 	}
 	
 	private void insertData(String[] data) {
@@ -213,7 +215,6 @@ public class BinarySearchTreeOfStrings {
 			}
 		}
 		this.size--;
-		System.out.println(this.toString());
 	}
 	
 	// Instance variables
@@ -281,7 +282,6 @@ public class BinarySearchTreeOfStrings {
 			return;
 		}
 		remove(x, this.root);
-		//balanceTree(this.root);
 	}
 
 	/**
