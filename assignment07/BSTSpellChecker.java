@@ -45,21 +45,22 @@ public class BSTSpellChecker implements SpellChecker {
 			//s = s.toLowerCase();
 			while(index < s.length()) {
 				//ignore a space and use it as a call to put a new word in words
-				if(s.charAt(index) != ' ') {
+				if(s.charAt(index) != ' ' && s.charAt(index) != '\n') {
 					word.append(s.charAt(index));
 				}
 				
-				if(s.charAt(index) == ' ') {
+				if(s.charAt(index) == ' ' || s.charAt(index) == '\n') {
 					words.add(word.toString());
 					word = new StringBuilder();
 				}
 				index++;
 			}
-			if(word.toString() != "") {
+			if(!word.toString().equals("") && !word.toString().equals("")) {
 				words.add(word.toString());
 				word = new StringBuilder();
 			}
 		}
+		System.out.println(words.toString());
 		return words;
 	}
 	
