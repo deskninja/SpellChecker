@@ -35,47 +35,6 @@ public class BinarySearchTreeOfStrings {
 		return false;
 	}
 	
-	private void balanceTree() {
-		Scanner s = new Scanner(this.inOrder(this.root));
-		String[] data = new String[this.size()];
-		int index = 0;
-		while(s.hasNext()) {
-			data[index] = s.next();
-			index++;
-		}
-		clear();
-		insertData(data);
-		s.close();
-		System.out.println(this.toString());
-	}
-	
-	private void insertData(String[] data) {
-		if(data.length > 0) {
-			if(data.length == 1)
-				insert(data[0]);
-			else {
-				insert(data[data.length / 2]);
-				String[] leftData = addData(data, 0, data.length / 2);
-				insertData(leftData);
-				if(data.length > 2) {
-					//String[] rightData = new String[data.length - ((data.length / 2) + 1)];
-					String[] rightData = addData(data, (data.length / 2) + 1, data.length);
-					insertData(rightData);
-				}
-			}
-		}
-	}
-	
-	private String[] addData(String[] data, int start, int end) {
-		String[] newData = new String[end - start];
-		int index = 0; 
-		for(int i = start; i < end; i++) {
-			newData[index] = data[i];
-			index++;
-		}
-		return newData;
-	}
-	
 	/**
 	 * outputs the data of the tree in-order
 	 * @param n
@@ -268,7 +227,7 @@ public class BinarySearchTreeOfStrings {
 	 */
 	public void remove(String x) {
 		if(this.size() == 0) {
-			throw new NoSuchElementException ();
+			throw  new  NoSuchElementException ();
 		}
 		if(this.size() == 1) {
 				if(this.root.data.equals(x)) {
@@ -313,7 +272,8 @@ public class BinarySearchTreeOfStrings {
 	 */
 	public String root() {
 		if(this.size() == 0)
-			throw new NoSuchElementException ();		
+			throw  new  NoSuchElementException ();
+		
 		return root.data; 
 	}
 

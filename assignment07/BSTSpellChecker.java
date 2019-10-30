@@ -3,6 +3,7 @@ package assignment07;
 import java.util.ArrayList;
 
 import components.list.List;
+import components.list.ListOnArrays;
 import components.simplereader.SimpleReader;
 import components.simplereader.SimpleReader1L;
 
@@ -10,7 +11,7 @@ public class BSTSpellChecker implements SpellChecker {
 
 	private BinarySearchTreeOfStrings dictionary;
 	ArrayList<String> validWords;
-	ArrayList<String> misspelled;
+	List<String> misspelled;
 	ArrayList<String> wordsToCheck;
 	
 	/**
@@ -26,6 +27,7 @@ public class BSTSpellChecker implements SpellChecker {
 			list.add(line);
 			line = file.nextLine();
 		}
+		list.add(line);
 		file.close();
 		return list;
 	}
@@ -40,11 +42,13 @@ public class BSTSpellChecker implements SpellChecker {
 		for(String s: file) {
 			index = 0;
 			//go through each character
+			//s = s.toLowerCase();
 			while(index < s.length()) {
 				//ignore a space and use it as a call to put a new word in words
 				if(s.charAt(index) != ' ') {
 					word.append(s.charAt(index));
 				}
+				
 				if(s.charAt(index) == ' ') {
 					words.add(word.toString());
 					word = new StringBuilder();
@@ -72,15 +76,21 @@ public class BSTSpellChecker implements SpellChecker {
 	
 	@Override
 	public List<String> misspelledWords(String filename) {
-		this.misspelled = //method to read file and return ArrayList of misspelled words
-		return null;
+		this.misspelled = new ListOnArrays<>();
+		ArrayList<String> words = wordsInFile(filename);
+		for(String word: words) {
+			if(!this.dictionary.contains(word)) {
+				this.misspelled.add(word);
+			}
+		}
+		return this.misspelled;
 	}
 	
 	@Override
 	public void clear() {
 		this.dictionary = new BinarySearchTreeOfStrings();
 		this.validWords = new ArrayList<>();
-		this.misspelled = new ArrayList<>();
+		this.misspelled = new ListOnArrays<>();
 		this.wordsToCheck = new ArrayList<>();
 	}
 

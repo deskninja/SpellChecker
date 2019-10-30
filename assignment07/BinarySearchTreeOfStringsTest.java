@@ -66,6 +66,7 @@ public class BinarySearchTreeOfStringsTest {
   public void removeRootWithLeftRightBothNonEmpty() {
     BinarySearchTreeOfStrings t = uutFromArgs("red", "yellow", "blue");
     t.remove("red");
+    System.out.println(t.toString());
     assertEquals("[blue,yellow]", t.toString());
     assertEquals(2, t.size());
   }
@@ -79,9 +80,10 @@ public class BinarySearchTreeOfStringsTest {
   }
 
   @Test
-  public void removeLeftLeaf() {
+  public void removetLeftLeaf() {
     BinarySearchTreeOfStrings t = uutFromArgs("red", "blue");
     t.remove("blue");
+    System.out.println(t.toString());
     assertEquals("[red]", t.toString());
     assertEquals(1, t.size());
   }
