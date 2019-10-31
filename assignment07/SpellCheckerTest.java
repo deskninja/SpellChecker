@@ -47,6 +47,7 @@ public class SpellCheckerTest {
 		SpellChecker sc = new BSTSpellChecker();
 		sc.loadValidWords("src/assignment07/a07-valid-words1.txt");
 		List<String> result = sc.misspelledWords("src/assignment07/a07-valid-words1.txt");
+		//ensure that all words are considered valid
 		assertEquals("[]", result.toString());
 	}
 }

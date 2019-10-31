@@ -129,6 +129,7 @@ public class Timing {
 				words.add(str);
 			}
 		}
+		file.close();
 		return words;
 	}
 

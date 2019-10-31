@@ -11,7 +11,6 @@ import java.util.Scanner;
  *
  */
 public class BinarySearchTreeOfStrings {
-	// TODO declare Node, private fields, etc.
 
 	/**
 	 * Node class to be used as roots and leaves
@@ -55,6 +54,10 @@ public class BinarySearchTreeOfStrings {
 		return treeData.toString();
 	}
 
+	/**
+	 * @param n
+	 * @param thisRoot
+	 */
 	private void insert(Node n, Node thisRoot) {
 		// find leaf/ base case
 		boolean right = false; // if it is left of the node false, if right, true
@@ -78,6 +81,10 @@ public class BinarySearchTreeOfStrings {
 		}
 	}
 
+	/**
+	 * @param x
+	 * @param head
+	 */
 	private void remove(String x, Node head) {
 		if (head.left != null && head.left.data.compareTo(x) <= 0) {
 			if (head.left.data.equals(x)) {
@@ -95,9 +102,13 @@ public class BinarySearchTreeOfStrings {
 			remove(x, head.right);
 			return;
 		}
+		// Shouldn't ever reach this point, so throw an error in case it does
 		throw new NoSuchElementException();
 	}
 
+	/**
+	 * 
+	 */
 	private void removeRoot() {
 		if (this.root.left != null) {
 			if (this.root.right != null) {
@@ -126,6 +137,12 @@ public class BinarySearchTreeOfStrings {
 		this.size--;
 	}
 
+	/**
+	 * 
+	 * @param removeNode
+	 * @param head
+	 * @param right
+	 */
 	private void removeElement(Node removeNode, Node head, boolean right) {
 		if (removeNode.left != null) {
 			if (removeNode.right != null) {
@@ -240,7 +257,7 @@ public class BinarySearchTreeOfStrings {
 	 * @return size of {@code this}
 	 */
 	public int size() {
-		return this.size; // TODO implement this method
+		return this.size; 
 	}
 
 	/**
