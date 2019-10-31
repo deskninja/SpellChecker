@@ -2,6 +2,7 @@ package assignment07;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.junit.Test;
@@ -15,108 +16,143 @@ import components.simplereader.SimpleReader1L;
 public class Timing {
 
 	@Test
-	public void heIsGoingForDistanceHeIsGoingForSpeed() {
-		SpellChecker sc = new BSTSpellChecker();
-		long start = System.nanoTime();
-		sc.loadValidWords("src/assignment07/dictionary.txt");
-		long stop = System.nanoTime();
-		System.out.println("BSTInsert " + (stop - start));
-	}
-	
-	@Test
-	public void containsBSTSpellCheckerTimeOrderedInsert() {
-		SpellChecker sc = new BSTSpellChecker();
-		sc.loadValidWords("src/assignment07/dictionary.txt");
-		long start = System.nanoTime();
-		sc.misspelledWords("src/assignment07/bible.txt");
-		long stop = System.nanoTime();
-		System.out.println("BSTContains " + (stop - start));
-	}
-	
-	@Test
-	public void contanisBSTSpellCheckerTimeRandomInsert() {
-		SpellChecker sc = new BSTSpellChecker();
-		sc.loadValidWords("src/assignment07/randomDictionary.txt");
-		long start = System.nanoTime();
-		sc.misspelledWords("src/assignment07/bible.txt");
-		long stop = System.nanoTime();
-		System.out.println("BSTContainsRandomInsert " + (stop - start));
-	}
-	
-	@Test
-	public void containsOtherSpellCheckerRandomInsert() {
-		BalancedBST1<String> bc = new BalancedBST1<>();
-		SimpleReader s = new SimpleReader1L("src/assignment07/randomDictionary.txt");
-		//insert the valid words to bc
-		while (!s.atEOS()) {
-			String line = s.nextLine();
-			for (String str : line.split(" ")) {
-				bc.insert(str);
-			}
-		}	
-		s.close();
+	public void timeTest() {
+		List<String> dictionary = ordered("src/assignment07/dictionary.txt");
+		List<String> check = ordered("src/assignment07/bible.txt");
+		BinarySearchTreeOfStrings st = new BinarySearchTreeOfStrings();
+		BalancedBST1<String> bst = new BalancedBST1<>();
 		
+		//test insert ordered dictionary
+		System.out.println(insert(dictionary, st));
+		st.clear();
+		//test insert random dictionary
+		System.out.println(randomTimeInsert(50, st, dictionary));
+		//test contains
+		System.out.println(contains(dictionary, check, st));
+		//test random contains
+		System.out.println(randomTimeContains(50, st, dictionary, check));
+		
+		//test BalancedBST1 insert
+		System.out.println(insert(dictionary, bst));
+		//test BalancedBST1 contains
+		System.out.println(contains(dictionary, check, bst));
+		//test BalancedBST1 insertRandom
+		System.out.println(randomTimeInsert(50, bst, dictionary));
+		//test BalancedBST1 containsRandom
+		System.out.println(randomTimeContains(50, bst, dictionary, check));
+	}
+	
+	
+	private long randomTimeContains(int iterate, BalancedBST1<String> st, List<String> dictionary, List<String> check) {
+		long time = 0;
+		for(int i = 0; i < iterate; i++) {
+			dictionary = randomOrder("src/assignment07/dictionary.txt");
+			time += contains(dictionary, check, st);
+			st.clear();
+		}
+		return time;
+	}
+	
+	private long randomTimeInsert(int iterate, BalancedBST1<String> st, List<String> dictionary) {
+		long time = 0;
+		for(int i = 0; i < iterate; i++) {
+			dictionary = randomOrder("src/assignment07/dictionary.txt");
+			time += insert(dictionary, st);
+			st.clear();
+		}
+		time /= 50;
+		return time;
+	}
+	
+	private long randomTimeInsert(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary) {
+		long time = 0;
+		for(int i = 0; i < iterate; i++) {
+			dictionary = randomOrder("src/assignment07/dictionary.txt");
+			time += insert(dictionary, st);
+			st.clear();
+		}
+		time /= 50;
+		return time;
+	}
+	
+	private long randomTimeContains(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary, List<String> check) {
+		long time = 0;
+		for(int i = 0; i < iterate; i++) {
+			dictionary = randomOrder("src/assignment07/dictionary.txt");
+			time += contains(dictionary, check, st);
+			st.clear();
+		}
+		return time;
+	}
+	
+	private long insert(List<String> dictionary, BinarySearchTreeOfStrings st) {
+		//insert the valid words to sc
 		long start = System.nanoTime();
-		List<String> misspelledWords = new ListOnArrays<String>();
-		SimpleReader bible = new SimpleReader1L("src/assignment07/bible.txt");
-		while (!bible.atEOS()) {
-			String line = bible.nextLine();
-			for (String str : line.split(" ")) {
-				if (!bc.contains(str)) {
-					misspelledWords.add(str);
-				}
-			}
+		for(String s: dictionary) {
+			st.insert(s);
 		}
 		long stop = System.nanoTime();
-		System.out.println("OtherContainsRandomInsert " + (stop - start));
-		bible.close();
+		return stop - start;
 	}
 	
+	private long contains(List<String> dictionary, List<String> check, BinarySearchTreeOfStrings st) {
+		insert(dictionary, st);
+		long start = System.nanoTime();
+		for(String s: check) {
+			st.contains(s);
+		}
+		long stop = System.nanoTime();
+		return stop - start;
+	}
 	
+	private long insert(List<String> dictionary, BalancedBST1<String> st) {
+		//insert the valid words to sc
+		long start = System.nanoTime();
+		for(String s: dictionary) {
+			st.insert(s);
+		}
+		long stop = System.nanoTime();
+		return stop - start;
+	}
+	
+	private long contains(List<String> dictionary, List<String> check, BalancedBST1<String> st) {
+		insert(dictionary, st);
+		long start = System.nanoTime();
+		for(String s: check) {
+			st.contains(s);
+		}
+		long stop = System.nanoTime();
+		return stop - start;
+	}
+	
+	public List<String> ordered(String filename){
+		SimpleReader file = new SimpleReader1L(filename);
+		List<String> words = new ListOnArrays<String>();
+		while (!file.atEOS()) {
+			String line = file.nextLine();
+			for (String str : line.split(" ")) {	
+				words.add(str);
+			}
+		}
+		return words;
+	}
 
-	@Test
-	public void insertOtherSpellChecker() {
-		BalancedBST1<String> bc = new BalancedBST1<>();
-		SimpleReader s = new SimpleReader1L("src/assignment07/dictionary.txt");
-		//insert the valid words to bc
-		long start = System.nanoTime();
+	public List<String> randomOrder(String filename) {
+		SimpleReader s = new SimpleReader1L(filename);
+		List<String> validWords = new ListOnArrays<String>();
 		while (!s.atEOS()) {
 			String line = s.nextLine();
 			for (String str : line.split(" ")) {
-				bc.insert(str);
-			}
-		}	
-		long stop = System.nanoTime();
-		System.out.println("OtherInsert " + (stop - start));
-		s.close();
-	}
-	
-	@Test
-	public void containsOtherSpellChecker() {
-		BalancedBST1<String> bc = new BalancedBST1<>();
-		SimpleReader s = new SimpleReader1L("src/assignment07/dictionary.txt");
-		//insert the valid words to bc
-		while (!s.atEOS()) {
-			String line = s.nextLine();
-			for (String str : line.split(" ")) {
-				bc.insert(str);
-			}
-		}	
-		s.close();
-		
-		long start = System.nanoTime();
-		List<String> misspelledWords = new ListOnArrays<String>();
-		SimpleReader bible = new SimpleReader1L("src/assignment07/bible.txt");
-		while (!bible.atEOS()) {
-			String line = bible.nextLine();
-			for (String str : line.split(" ")) {
-				if (!bc.contains(str)) {
-					misspelledWords.add(str);
-				}
+				validWords.add(str);
 			}
 		}
-		long stop = System.nanoTime();
-		System.out.println("OtherContains " + (stop - start));
-		bible.close();
-	}
+		s.close();
+		List<String> randomWords = new ListOnArrays<String>();
+		Random r = new Random();
+		while(validWords.size() > 0) {
+			String nextItem = validWords.remove(r.nextInt(validWords.size()));
+			randomWords.add(nextItem);
+		}
+		return randomWords;
+	}		
 }
