@@ -43,6 +43,16 @@ public class Timing {
 	}
 	
 	
+	private long randomTimeContains(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary, List<String> check) {
+		long time = 0;
+		for(int i = 0; i < iterate; i++) {
+			dictionary = randomOrder("src/assignment07/dictionary.txt");
+			time += contains(dictionary, check, st);
+			st.clear();
+		}
+		return time / iterate;
+	}
+	
 	private long randomTimeContains(int iterate, BalancedBST1<String> st, List<String> dictionary, List<String> check) {
 		long time = 0;
 		for(int i = 0; i < iterate; i++) {
@@ -50,7 +60,7 @@ public class Timing {
 			time += contains(dictionary, check, st);
 			st.clear();
 		}
-		return time;
+		return time / iterate;
 	}
 	
 	private long randomTimeInsert(int iterate, BalancedBST1<String> st, List<String> dictionary) {
@@ -60,8 +70,7 @@ public class Timing {
 			time += insert(dictionary, st);
 			st.clear();
 		}
-		time /= 50;
-		return time;
+		return time / iterate;
 	}
 	
 	private long randomTimeInsert(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary) {
@@ -71,18 +80,7 @@ public class Timing {
 			time += insert(dictionary, st);
 			st.clear();
 		}
-		time /= 50;
-		return time;
-	}
-	
-	private long randomTimeContains(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary, List<String> check) {
-		long time = 0;
-		for(int i = 0; i < iterate; i++) {
-			dictionary = randomOrder("src/assignment07/dictionary.txt");
-			time += contains(dictionary, check, st);
-			st.clear();
-		}
-		return time;
+		return time / iterate;
 	}
 	
 	private long insert(List<String> dictionary, BinarySearchTreeOfStrings st) {
