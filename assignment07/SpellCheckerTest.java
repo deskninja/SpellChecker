@@ -5,9 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import components.list.List;
-import components.simplereader.SimpleReader;
-import components.simplereader.SimpleReader1L;
-import components.bintree.BalancedBST1;
 
 public class SpellCheckerTest {
 	@Test
