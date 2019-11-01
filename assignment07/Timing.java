@@ -24,23 +24,23 @@ public class Timing {
 		BalancedBST1<String> bst = new BalancedBST1<>();
 
 		// test insert ordered dictionary
-		System.out.println(insert(dictionary, st));
+		System.out.println("ordered insert BinarySearchTreeOfStrings " + insert(dictionary, st));
 		st.clear();
 		// test insert random dictionary
-		System.out.println(randomTimeInsert(50, st, dictionary));
+		System.out.println("random insert BinarySearchTreeOfStrings " + randomTimeInsert(50, st, dictionary));
 		// test contains
-		System.out.println(contains(dictionary, check, st));
+		System.out.println("ordered contains BinarySearchTreeOfStrings " +contains(dictionary, check, st));
 		// test random contains
-		System.out.println(randomTimeContains(50, st, dictionary, check));
+		System.out.println("random contains BinarySearchTreeOfStrings " +randomTimeContains(50, st, dictionary, check));
 		// BalancedBST1 tests
 		// test BalancedBST1 insert
-		System.out.println(insert(dictionary, bst));
+		System.out.println("ordered insert BalancedBST1s " +insert(dictionary, bst));
 		// test BalancedBST1 contains
-		System.out.println(contains(dictionary, check, bst));
+		System.out.println("ordered contains BalancedBST1 " +contains(dictionary, check, bst));
 		// test BalancedBST1 insertRandom
-		System.out.println(randomTimeInsert(50, bst, dictionary));
+		System.out.println("random insert BalancedBST1 " +randomTimeInsert(50, bst, dictionary));
 		// test BalancedBST1 containsRandom
-		System.out.println(randomTimeContains(50, bst, dictionary, check));
+		System.out.println("random contains BalancedBST1 " +randomTimeContains(50, bst, dictionary, check));
 	}
 
 	/**

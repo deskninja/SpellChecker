@@ -23,6 +23,13 @@ public class BinarySearchTreeOfStrings {
 		private Node left, right;
 	}
 
+	/**
+	 * recursive method determines if the tree contains a Node with data x
+	 * 
+	 * @param x String data to check
+	 * @param head Node the head of the tree
+	 * @return true iff the tree contains x
+	 */
 	private boolean contains(String x, Node head) {
 		if (head.data.compareTo(x) == 0)
 			return true;
