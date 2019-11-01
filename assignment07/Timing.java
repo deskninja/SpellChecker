@@ -44,31 +44,38 @@ public class Timing {
 	}
 
 	/**
-	 * This method times a BinarySearchTreeOfStrings object and how long it takes to determine if it contains a word
+	 * This method times a BinarySearchTreeOfStrings object and how long it takes to determine if it contains the words in check
 	 * 
 	 * @param iterate int number of times this test is repeated
-	 * @param st BinarySearchTreeOfStrings
-	 * @param dictionary
-	 * @param check
-	 * @return
+	 * @param st BinarySearchTreeOfStrings object
+	 * @param dictionary List<String> of valid words
+	 * @param check List<String> list to check against the valid words in dictionary
+	 * @return long time of all the contains opperations / iterate
+	 * @modifes st
 	 */
 	private long randomTimeContains(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary,
 			List<String> check) {
 		long time = 0;
 		for (int i = 0; i < iterate; i++) {
+			//create a new random tree
 			dictionary = randomOrder("src/assignment07/dictionary.txt");
+			//add the time it took to go through check
 			time += contains(dictionary, check, st);
 			st.clear();
 		}
+		//return the average time
 		return time / iterate;
 	}
 
 	/**
-	 * @param iterate
-	 * @param st
-	 * @param dictionary
-	 * @param check
-	 * @return
+	 * This method times a BalancedBST1<String> object and how long it takes to determine if it contains a the words in check
+	 * 
+	 * @param iterate int number of times this test is repeated
+	 * @param st BalancedBST1<String> object
+	 * @param dictionary List<String> of valid words
+	 * @param check List<String> list to check against the valid words in dictionary
+	 * @return long time of all the contains opperations / iterate
+	 * @modifies st
 	 */
 	private long randomTimeContains(int iterate, BalancedBST1<String> st, List<String> dictionary, List<String> check) {
 		long time = 0;
@@ -81,10 +88,15 @@ public class Timing {
 	}
 
 	/**
-	 * @param iterate
-	 * @param st
-	 * @param dictionary
-	 * @return
+	 * This method takes st and inserts a randomly sorted List of Strings into it
+	 * and then returns the time it took to insert all of them / the number of iterations 
+	 * of inserts
+	 * 
+	 * @param iterate int number of times this test is repeated
+	 * @param st BalancedBST1<String> object
+	 * @param dictionary List<String> of valid words
+	 * @return long time of all the contains opperations / iterate
+	 * @modifies st
 	 */
 	private long randomTimeInsert(int iterate, BalancedBST1<String> st, List<String> dictionary) {
 		long time = 0;
@@ -97,10 +109,15 @@ public class Timing {
 	}
 
 	/**
-	 * @param iterate
-	 * @param st
-	 * @param dictionary
-	 * @return
+	 * This method takes st and inserts a randomly sorted List of Strings into it
+	 * and then returns the time it took to insert all of them / the number of iterations 
+	 * of inserts
+	 * 
+	 * @param iterate int number of times this test is repeated
+	 * @param st BinarySearchTreeOfStrings object
+	 * @param dictionary List<String> of valid words
+	 * @return long time of all the contains opperations / iterate
+	 * @modifies st
 	 */
 	private long randomTimeInsert(int iterate, BinarySearchTreeOfStrings st, List<String> dictionary) {
 		long time = 0;
@@ -113,9 +130,11 @@ public class Timing {
 	}
 
 	/**
-	 * @param dictionary
-	 * @param st
-	 * @return
+	 * This method times how long it takes to insert all elements in dictionary into st
+	 * 
+	 * @param st BinarySearchTreeOfStrings object
+	 * @param dictionary List<String> of valid words
+	 * @return long time it took to insert
 	 */
 	private long insert(List<String> dictionary, BinarySearchTreeOfStrings st) {
 		// insert the valid words to sc
@@ -128,10 +147,13 @@ public class Timing {
 	}
 
 	/**
-	 * @param dictionary
-	 * @param check
-	 * @param st
-	 * @return
+	 * this method times how long it takes to run contains on all items in check aganst a tree made 
+	 * from dictionary
+	 * 
+	 * @param st BinarySearchTreeOfStrings object
+	 * @param dictionary List<String> of valid words
+	 * @return long time it took to insert
+	 * @return long the time it took
 	 */
 	private long contains(List<String> dictionary, List<String> check, BinarySearchTreeOfStrings st) {
 		insert(dictionary, st);
@@ -144,9 +166,11 @@ public class Timing {
 	}
 
 	/**
-	 * @param dictionary
-	 * @param st
-	 * @return
+	 * This method times how long it takes to insert all elements in dictionary into st
+	 * 
+	 * @param st BalancedBST1<String> object
+	 * @param dictionary List<String> of valid words
+	 * @return long time it took to insert
 	 */
 	private long insert(List<String> dictionary, BalancedBST1<String> st) {
 		// insert the valid words to sc
@@ -159,10 +183,13 @@ public class Timing {
 	}
 
 	/**
-	 * @param dictionary
-	 * @param check
-	 * @param st
-	 * @return
+	 * this method times how long it takes to run contains on all items in check aganst a tree made 
+	 * from dictionary
+	 * 
+	 * @param st BalancedBST1<String> object
+	 * @param dictionary List<String> of valid words
+	 * @return long time it took to insert
+	 * @return long the time it took
 	 */
 	private long contains(List<String> dictionary, List<String> check, BalancedBST1<String> st) {
 		insert(dictionary, st);
@@ -175,8 +202,11 @@ public class Timing {
 	}
 
 	/**
-	 * @param filename
-	 * @return
+	 * Reads the file from filename and returns a List<String> of all the separate words
+	 * separated by " "
+	 * 
+	 * @param filename the file to be read
+	 * @return List<String> words in the file in order
 	 */
 	private List<String> ordered(String filename) {
 		SimpleReader file = new SimpleReader1L(filename);
@@ -192,8 +222,11 @@ public class Timing {
 	}
 
 	/**
-	 * @param filename
-	 * @return
+	 * Reads the file from filename and returns a List<String> of all the separate words
+	 * separated by " "
+	 * 
+	 * @param filename the file to be read
+	 * @return List<String> words in the file in random order
 	 */
 	private List<String> randomOrder(String filename) {
 		SimpleReader s = new SimpleReader1L(filename);
@@ -207,6 +240,7 @@ public class Timing {
 		s.close();
 		List<String> randomWords = new ListOnArrays<String>();
 		Random r = new Random();
+		//randomly choose which element to insert until validWords is empty
 		while (validWords.size() > 0) {
 			String nextItem = validWords.remove(r.nextInt(validWords.size()));
 			randomWords.add(nextItem);
