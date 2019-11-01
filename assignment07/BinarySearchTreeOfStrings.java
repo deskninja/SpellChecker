@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class BinarySearchTreeOfStrings {
 
 	/**
-	 * Node class to be used as roots and leaves
+	 * Node class contains data leaves
 	 * 
 	 * @author Joshua Wells, Jonathan Oliveros
 	 * 
@@ -34,9 +34,9 @@ public class BinarySearchTreeOfStrings {
 	}
 
 	/**
-	 * outputs the data of the tree in-order
+	 * outputs the data of the tree in sorted order, lowest value to hightest value
 	 * 
-	 * @param n
+	 * @param head Node that is the head of the tree to be returned
 	 */
 	private String inOrder(Node head) {
 		if (head == null)
@@ -55,8 +55,12 @@ public class BinarySearchTreeOfStrings {
 	}
 
 	/**
-	 * @param n
-	 * @param thisRoot
+	 * recursive function that traverses through the tree to the correct leaf where node n is sorted
+	 * then adds node n to that place
+	 * 
+	 * @param n Node to be inserted
+	 * @param thisRoot Node root of the tree being inserted to
+	 * @modifies this tree
 	 */
 	private void insert(Node n, Node thisRoot) {
 		// find leaf/ base case
@@ -82,8 +86,13 @@ public class BinarySearchTreeOfStrings {
 	}
 
 	/**
-	 * @param x
-	 * @param head
+	 * recursive function that traverses through the tree until it finds a Node with data x
+	 * it deletes this node and takes the far right leaf of the left branch of that node (if ther is one)
+	 * and places that node in place of the node to be removed
+	 * 
+	 * @param x String the data to be removed
+	 * @param head Node the head of the tree where x is being searched for
+	 * @modifies this tree
 	 */
 	private void remove(String x, Node head) {
 		if (head.left != null && head.left.data.compareTo(x) <= 0) {
@@ -107,7 +116,8 @@ public class BinarySearchTreeOfStrings {
 	}
 
 	/**
-	 * 
+	 * This method removes this.root and replaces it with the best Node in the tree to retain binary
+	 * sorting and the smallest height
 	 */
 	private void removeRoot() {
 		if (this.root.left != null) {
@@ -138,17 +148,24 @@ public class BinarySearchTreeOfStrings {
 	}
 
 	/**
+	 * This method deciedes what to do when a node is being removed
+	 * If the node has a right and left Node below it, it choses the left path
+	 * and the far right node of that path to replace it. If there is no path below 
+	 * it is replaced by the left Node, if there is no left Node then it is replaced by 
+	 * the right node, and finally if there is no left or right node below it, it is replaced
+	 * by nothing and simply removed.
 	 * 
-	 * @param removeNode
-	 * @param head
-	 * @param right
+	 * @param removeNode Node to be removed
+	 * @param head Node the parent Node of removeNode
+	 * @param right boolean tells if removeNode is the left or right Node of head
+	 * @modifies this tree
 	 */
 	private void removeElement(Node removeNode, Node head, boolean right) {
 		if (removeNode.left != null) {
 			if (removeNode.right != null) {
 				Node hold = removeNode.left;
 				if (hold.right != null) {
-					Node tail = removeNode.left;
+					Node tail = removeNode.left; //the parent Node of hold
 					hold = hold.right;
 					while (hold.right != null) {
 						hold = hold.right;
@@ -166,14 +183,18 @@ public class BinarySearchTreeOfStrings {
 			} else {
 				head.left = removeNode.left;
 			}
-		} else {
+		} 
+		//if there is no left child node of removeNode
+		else {
 			if (removeNode.right != null) {
 				if (right) {
 					head.right = removeNode.right;
 				} else {
 					head.left = removeNode.right;
 				}
-			} else {
+			} 
+			//if there is no left or right child Node of removeNode
+			else {
 				if (right) {
 					head.right = null;
 				} else {
@@ -181,6 +202,7 @@ public class BinarySearchTreeOfStrings {
 				}
 			}
 		}
+		//decrement the size of this tree by one
 		this.size--;
 	}
 
@@ -196,7 +218,9 @@ public class BinarySearchTreeOfStrings {
 	}
 
 	/**
-	 * Removes all the nodes in this tree.
+	 * Removes all the nodes in this tree by creating 
+	 * new instances of the root and data of the root
+	 * size is also set to 0
 	 * 
 	 * @modifies this tree
 	 */
@@ -220,7 +244,7 @@ public class BinarySearchTreeOfStrings {
 			this.size++;
 		}
 
-		// find leaf/ base case
+		// find leaf/ base case with a recursive insert
 		else {
 			insert(n, root);
 		}
@@ -237,6 +261,7 @@ public class BinarySearchTreeOfStrings {
 		if (this.size() == 0) {
 			throw new NoSuchElementException();
 		}
+		//if we only have {@code root} in this tree
 		if (this.size() == 1) {
 			if (this.root.data.equals(x)) {
 				this.clear();
@@ -244,6 +269,7 @@ public class BinarySearchTreeOfStrings {
 			}
 			throw new NoSuchElementException();
 		}
+		//check to see if {@code x} is in {@code root}
 		if (this.root.data.equals(x)) {
 			removeRoot();
 			return;
@@ -267,8 +293,10 @@ public class BinarySearchTreeOfStrings {
 	 * @return true iff this contains x
 	 */
 	public boolean contains(String x) {
+		//check the root
 		if (this.root.data.compareTo(x) == 0)
 			return true;
+		//recursively travel the tree
 		return contains(x, this.root);
 	}
 
@@ -281,7 +309,7 @@ public class BinarySearchTreeOfStrings {
 	public String root() {
 		if (this.size() == 0)
 			throw new NoSuchElementException();
-
+		//if there is data in root (size > 0)
 		return root.data;
 	}
 
@@ -289,7 +317,7 @@ public class BinarySearchTreeOfStrings {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		result.append("[");
-		Scanner s = new Scanner(this.inOrder(this.root));
+		Scanner s = new Scanner(this.inOrder(this.root)); //scanner for the data of this tree in order of smallest to larges
 		if (s.hasNext())
 			result.append(s.next());
 		while (s.hasNext()) {

@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import components.list.List;
 
+/**
+ * @author Joshua Wells, Jonathan Oliveros
+ *
+ */
 public class SpellCheckerTest {
 	@Test
 	public void testInput1() {
@@ -25,25 +29,27 @@ public class SpellCheckerTest {
 	}
 
 	@Test
-	public void emptyValidWords() {
+	public void emptyValidWordsTest() {
 		SpellChecker sc = new BSTSpellChecker();
 		// check to see if it throws an error
 		sc.misspelledWords("src/assignment07/a07-input2.txt");
 	}
 
-	public void emptyFile() {
+	@Test
+	public void emptyFileTest() {
 		SpellChecker sc = new BSTSpellChecker();
 		// check to see if it throws an error
 		sc.misspelledWords("src/assignment07/empty.txt");
 	}
 
-	public void empty() {
+	@Test
+	public void emptyBSTSpellCheckerTest() {
 		SpellChecker sc = new BSTSpellChecker();
 		sc.misspelledWords("src/assignment07/empty.txt");
 	}
 
 	@Test
-	public void testAllValidWords() {
+	public void testAllValidWordsAgainstAllValidWords() {
 		SpellChecker sc = new BSTSpellChecker();
 		sc.loadValidWords("src/assignment07/a07-valid-words1.txt");
 		List<String> result = sc.misspelledWords("src/assignment07/a07-valid-words1.txt");

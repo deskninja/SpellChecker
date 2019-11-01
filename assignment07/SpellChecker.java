@@ -5,7 +5,7 @@ import components.list.List;
 /**
  * Public interface for a simple spell checker.
  * 
- * @author Swaroop Joshi
+ * @author Jonathan Oliveros, Joshua Wells
  *
  */
 public interface SpellChecker {

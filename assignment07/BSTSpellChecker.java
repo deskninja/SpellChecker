@@ -31,7 +31,7 @@ public class BSTSpellChecker implements SpellChecker {
 		SimpleReader s = new SimpleReader1L(filename);
 		while (!s.atEOS()) {
 			String line = s.nextLine();
-			//separate lines into words to insert using regex
+			//separate lines into words to insert using line.split
 			for (String str : line.split(" ")) {
 				validWords.insert(str);
 			}
@@ -60,6 +60,9 @@ public class BSTSpellChecker implements SpellChecker {
 	}
 
 
+	/* 
+	 * creates the BSTSpellChecker as it is instantiated with empty validWords and mispelledWords
+	 */
 	@Override
 	public void clear() {
 		misspelledWords = new ListOnArrays<String>();
